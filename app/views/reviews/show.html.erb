@@ -1,0 +1,11 @@
+NAME:<%= @review.product.name %>
+RATING:<%= @review.rating %>
+REVIEWS:<%= @review.body %>
+<li>the other list rest of the reviews are </li>
+<%Review.all.each do |r| %>
+  <ol>
+  <%if r.product_id!=@review.product_id %> 
+     <li> <%=Review.find(r.id).body %>RATING<%= Review.fing(r.id).rating%> </li>
+  <% end %>
+  </ol>
+<%end%>  

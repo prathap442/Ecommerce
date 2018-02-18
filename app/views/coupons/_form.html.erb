@@ -1,0 +1,195 @@
+<%= form_with(model: coupon, local: true, id: 'coupon_form' ) do |form| %>
+  <% if coupon.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(coupon.errors.count, "error") %> prohibited this coupon from being saved:</h2>
+
+      <ul>
+      <% coupon.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <span id='verifier'></span>
+
+  <div class="field">
+    <%= form.label :code %>
+    <%= form.text_field :code, id: :coupon_code %>
+    <span id= 'couponCodeError'></span>
+  </div>
+
+  <div class="field">
+    <%= form.label :discount %>
+    <%= form.number_field :discount, id: :coupon_discount %>
+    <span id= 'couponDiscountError'></span>
+  </div>
+
+  <div class="field">
+    <%= form.label :expiry_date %>
+    <%= form.datetime_select :expiry_date, id: :coupon_expiry_date %>
+    <span id= 'couponExpiryDateError'></span>
+  </div>
+
+  <div class="field">
+    <%= form.label :coupon_url %>
+    <%= form.text_field :url, id: :coupon_url %>
+    <span id= 'couponUrlError'></span>
+  </div>
+
+
+  <div class="actions">
+    <%= form.submit id:'submitTheDetails'%>
+  </div>
+<% end %>
+<script>
+  var couponCodeHandle = document.getElementById('coupon_code');
+  var couponDiscountHandle = document.getElementById('coupon_discount');
+  var couponExpiryDateHandle = document.getElementById('coupon_expiry_date');
+  var couponUrlHandle = document.getElementById('coupon_url');
+  var submitHandle = document.getElementById('submitTheDetails');
+  var formHandle = document.getElementById('coupon_form');
+
+  var couponCodeErrorHandle = document.getElementById('couponCodeError');
+  var couponDiscountErrorHandle = document.getElementById('couponDiscountError');
+  var couponExpiryDateErrorHandle = document.getElementById('couponExpiryDateError');
+  var couponUrlErrorHandle = document.getElementById('couponUrlError');
+  var verifierHandle = document.getElementById('verifier')
+  var regexForUrl = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;  
+  var validator={
+    couponCodeValid: false,
+    couponDiscountValid: false,
+    couponExpiryDateValid: false,
+    couponUrlValid: false,
+  }
+  //code,expirydate,url ---are needed to have the presence and their uniqueness too
+  couponCodeHandle.addEventListener('blur',function(){
+      if(couponCodeHandle.value !== ""){
+         var xhr = new XMLHttpRequest();
+         xhr.open('GET','/coupons/unique_coupon_code_checker?code='+couponCodeHandle.value,true);
+         xhr.onreadystatechange = function(){
+             if((xhr.status === 200)&&(xhr.readyState === 4)){
+                 var response = JSON.parse(xhr.responseText)
+                 if(response.msg === true){
+                      couponCodeErrorHandle.innerHTML = 'the coupon code givent is unique and can be given to further process';
+                      validator.couponCodeValid = true;
+                 }     
+                 else{
+                      couponCodeErrorHandle.innerHTML = 'the coupon already exists please retry with the other coupon';
+                      validator.couponCodeValid = false;
+                 }
+             }
+         }
+         xhr.send();
+      }
+      else{
+        console.log('you are in else block');
+        validator.couponCodeValid = 'false';
+        couponCodeErrorHandle.innerHTML ='the code is blank'; 
+      }
+  },false)
+
+  couponDiscountHandle.addEventListener('blur',function(){
+    if(couponDiscountHandle.value !== ""){
+     if(couponDiscountHandle.value>=0){
+          couponDiscountErrorHandle.innerHTML ='the discount is valid';
+          validator.couponDiscountValid = true  
+      }    
+     else{
+          couponDiscountErrorHandle.innerHTML = 'the discount are not applied for this coupon'    
+          validator.couponDiscountValid = false
+     }    
+    }
+    else{
+       couponDiscountErrorHandle.innerHTML = 'the field can \'t be blank';
+       validator.couponDiscountValid = false;
+
+    }
+  },false)
+
+   couponDiscountHandle.addEventListener('focus',function(){
+     couponDiscountErrorHandle.innerHTML = 'the discount for that particular coupon code';
+     validator.couponDiscountValid = false;
+
+   },false)
+
+   couponUrlHandle.addEventListener('blur',function(){
+      if(couponUrlHandle.value !== "" ){
+          if(regexForUrl.test(couponUrlHandle.value)){
+                 couponUrlErrorHandle.innerHTML = 'the coupon url is valid';  
+          //second we will finishing checking whether it is a valid url our not
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET','/coupons/unique_url_checker?url='+couponUrlHandle.value,true);
+              xhr.onreadystatechange = function(){
+                   if((xhr.status === 200)&&(xhr.readyState === 4)){
+                        var response = JSON.parse(xhr.responseText);
+                        console.log(response);
+                        if(response.msg){
+                           couponUrlErrorHandle.innerHTML = 'valid coupon Url';
+                           validator.couponUrlValid = true
+                        }
+                        else{
+                           couponUrlErrorHandle.innerHTML = 'the coupon url is already existing';
+                            validator.couponUrlValid = false
+                        } 
+                   }
+              }
+              xhr.send();
+          }
+          else{
+            couponUrlErrorHandle.innerHTML= 'not a valid url'; 
+            validator.couponUrlValid = false
+          }
+      }   
+        else{
+          couponUrlErrorHandle.innerHTML= 'can\'t be blank'
+          validator.couponUrlValid = false
+          console.log('in the else state where no matter in field');
+      }    
+    },false)
+
+   //checking the uniquenesss fot the coupon expirydate
+   /*couponExpiryDateHandle.addEventListener('blur',function(){
+      if(couponExpiryDateHandle.value !== ''){ 
+         if(couponExpiryDateHandle.value >= new Date()){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','/coupons/unique_expire_date_checker?expiry_date='+couponExpiryDateHandle.value,true);
+            xhr.onreadystatechange = function(){
+               if((xhr.readyState === 4)&&(xhr.status === 200)){
+                var response = JSON.parse(xhr.responseText);
+                if(response.msg){
+                   couponExpiryDateErrorHandle.innerHTML = 'the coupon Expiry DAte is valid'
+                   validator.couponExpiryDateValid = true; 
+                }
+                else{
+                    couponExpiryDateErrorHandle.innerHTML = 'the coupon expiry date already exists please try other'
+                     validator.couponsExpiryDateValid = false;
+                }
+               }
+            }
+         }
+         else{
+            couponExpiryDateErrorHandle.innerHTML = "the expiry date is invalid";
+            validator.couponExpiryDateValid = false
+         }
+      }
+      else{
+        couponExpiryDateErrorHandle.innerHTML = 'the expiry Date is not mentioned';
+      }   
+   },false)
+   */
+      validator.couponExpiryDateValid = true;
+      formHandle.addEventListener('submit',function(e){
+         if(Object.values(validator).includes(false)){
+            e.preventDefault(); 
+            setTimeout(function(){
+              submitHandle.disabled = false
+            },300)
+         }
+         else{
+            verifierHandle.innerHTML = 'ALL the conditions are satisfied by the form'
+         }
+      },false)
+
+</script>  
+
+ 

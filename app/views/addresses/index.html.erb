@@ -1,0 +1,21 @@
+listing of all the addresses that are belonging to you
+</br>
+<%@addresses.each do |address|%>
+  <% if(address.user_id==current_user.id)||(can? :read,@addresses) %>
+        NAME    :<%=address.name%>,
+        PINCODE :<%=address.pincode%>,
+        STREET  :<%=address.street%>,
+        LANDMARK:<%= address.landmark%>,
+        CITY:<%=address.city%>
+        <% if(can? :update,address)%>
+           <%= link_to "EDIT",edit_address_path(address.id)%>
+        <% end %>
+        <% if(can? :delete,address)%>
+           <%= link_to "DELETE",address_path(address.id),method: :delete,data:{confirm: "Are u sure?"}%>
+        <% end %></br>
+           
+   <%end%>
+
+<%end%>   
+
+<%= link_to "Add a new address",new_address_path %>

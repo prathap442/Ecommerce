@@ -1,0 +1,15 @@
+<h1>Notification#order_confirmation</h1>
+<p>Hello <%= @order.user.username%>,<br/>
+  Your order has successfully been placed .Total of the order is <%= @order.total%></p>
+  <h2>Order summary</h2>
+  <h2><%=@order.order_number%></h2>
+  <p> <%=@order.updated_at%>INR<%= @order.total %></p>
+  <ol>
+   <% @order.order_line_items.each do |line_item|%>
+         <li><%= line_item.product.name%>INR <%=line_item.price%> <%=line_item.quantity %></li>     
+   <% end %></ol>
+   <p>thank you for shopping with us </p>
+
+<p>
+  <%= @greeting %>, find me in app/views/notification_mailer/order_confirmation.html.erb
+</p>

@@ -1,0 +1,178 @@
+
+<%= form_for @product do |f| %>
+  <%if @product.errors.any? %>
+      <h3> These errors prohibited the form from being  saved:</h3>
+         <ul>
+           <% @product.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+           <% end %>
+        </ul>
+  <% end %>
+   <h2 id='errors_finder'></h2>    
+   <label for="product_category_id"> Category : </label>
+   <%= f.collection_select :category_id,Category.all,:id, :name,prompt: "Select Category" %> <br/>
+   <label for="product_name"> Name : </label> 
+   <%= f.text_field :name, placeholder: "Enter the name" %> <span id="nameMsg">
+   </span> <br/>
+
+   <label for="product_description"> Description : </label>
+   <%= f.text_field :description%> <span id='descriptionError'></span><br/>
+   <label for = "product_price"> Price : </label>
+   <%= f.number_field :price,min: 1%> <span id='priceError'></span> <br/>
+   <label for="product_stock"> Stock : </label>
+   <%= f.number_field :stock,min: 0 %> <span id='stockError'></span><br/>
+   <lable for="product_cod_eligible">Cod_eligible</lable>
+   <%= f.check_box :cod_eligible %> <span id='codError'></span><br/>
+   <label for="product_feature_image_url">feature_image_url</label>
+   <%= f.text_field :feature_image_url %><span id='imageError'></span><br/>
+   <%=f.submit id: 'product_submit'%>
+<% end %>
+<script>
+  var reg = /^(ftp|https?):\/\/+(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/
+  var formHandle = document.getElementById('new_product');
+  var nameHandle = document.getElementById('product_name');
+  var nameMsgHandle = document.getElementById('nameMsg');
+  var descriptionHandle = document.getElementById('product_description');
+  var priceHandle = document.getElementById('product_price');
+  var stockHandle = document.getElementById('product_stock');
+  var codEligibleHandle = document.getElementById('product_cod_eligible');
+  var imageHandle = document.getElementById('product_feature_image_url');
+  var submitHandle = document.getElementById('product_submit');
+
+  var descriptionErrorHandle = document.getElementById('descriptionError');
+  var priceErrorHandle = document.getElementById('priceError');
+  var stockErrorHandle = document.getElementById('stockError');
+  var codErrorHandle = document.getElementById('codError');
+  var imageErrorHandle = document.getElementById('imageError')
+  //validations for the uniqueness of the name and the presence of the name needs to nbe  done
+  
+  var validator={
+    nameValid: false,
+    priceValid: false,
+    descriptionValid: false,
+    stockValid: false,
+    codeEligibleValid: false
+  }
+
+  //this has validated name presence,uniqueness
+  nameHandle.addEventListener('blur',function(){
+        if(nameHandle.value !== ""){
+           var xhr = new XMLHttpRequest();
+           xhr.open('GET','/products/unique_name_checker?name='+nameHandle.value,true);
+           xhr.onreadystatechange= function(){
+               if((xhr.status === 200)&&(xhr.readyState === 4)){
+                 var response = xhr.responseText;
+                 
+                  if(!response.msg){
+                     console.log(response);
+                     nameMsgHandle.innerHTML = "the name is valid";
+                     validator.nameValid = true;
+                  }
+                  else{
+                     nameMsgHandle.innerHTML = 'the name is already existing';
+                     validator.nameValid = false;
+                  }
+               }
+           }
+           xhr.send();
+        }
+        else{
+           validator.nameValid = false;
+           nameMsgHandle.innerHTML = 'can\'t be blank'
+        }  
+  },false)
+//
+  descriptionHandle.addEventListener('blur',function(){
+     if(descriptionHandle.value !== ""){
+         if(descriptionHandle.value.length >= 5){
+            console.log('the description is beyond 5 chara');
+            validator.descriptionValid = true;
+            descriptionErrorHandle.innerHTML = 'this is a valid description'
+         }
+         else{
+            descriptionErrorHandle.innerHTML = 'the description can\'t be less than 5 characters'
+            validator.descriptionValid = false    
+         }
+
+     }
+     else{
+       descriptionErrorHandle.innerHTML = 'description shouldn\'t be blank';
+     }
+  },false)
+
+  descriptionHandle.addEventListener('focus',function(){
+    descriptionErrorHandle.innerHTML = 'type description for about 5 characters';
+  },false)
+
+  priceHandle.addEventListener('focus',function(){
+     priceErrorHandle.innerHTML = 'the price should be in float';
+  },false)
+  
+  priceHandle.addEventListener('blur',function(){
+     if((priceHandle.value !== "")&&(priceHandle.value>0)){
+         if(parseInt(priceHandle.value) == parseFloat(priceHandle.value)){
+           priceErrorHandle.innerHTML = 'the number should be a float number';
+         }
+         else{
+            priceErrorHandle.innerHTML = 'the price is a valid one';      
+         }
+     }
+     else{
+         priceErrorHandle.innerHTML = 'u haven\'t filled the entity'
+     }
+  },false) 
+
+  stockHandle.addEventListener('blur',function(){
+     if(stockHandle.value === ''){
+         stockErrorHandle.innerHTML = 'the stock value should be satifisied';
+     }
+     else{
+         stockErrorHandle.innerHTML = 'the stock value given is valid'
+     } 
+  },false)
+
+  stockHandle.addEventListener('focus',function(){
+     stockErrorHandle.innerHTML = 'the stock should be mentioned';
+  },false)
+
+  codEligibleHandle.addEventListener('focus',function(){
+     codErrorHandle.innerHTML = 'the cod should be mentioned if required else dont mention';
+  },false)
+
+  imageHandle.addEventListener('blur',function(){
+    if(imageHandle.value !== ""){
+       if(reg.test(imageHandle.value)){
+          imageErrorHandle.innerHTML = 'this is a valid url'
+       }
+       else{
+          imageErrorHandle.innerHTML = 'this is a invalid url'
+       }
+    }
+    else{
+      imageErrorHandle.innerHTML = 'the image path is not specified here';
+    }
+  },false)
+
+  formHandle.addEventListener('submit',function(e){
+         if(Object.values(validator).includes(false)){
+             e.preventDefault();
+             setTimeout(function(){
+                   submitHandle.disabled = false
+             },300)   
+         }
+         else{
+         }
+  },false)
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+<h1>edit the category details now as shown in the form</h1>
+<%= render 'form' %>
+<script>
+  var nameHandle = document.getElementById('category_name');
+  var nameErrorHandle = document.getElementById('nameError');
+  nameHandle.addEventListener('blur',function(){
+       if(nameHandle.value === '')
+             nameErrorHandle.innerHTML = 'can\'t be blank';
+  },false)
+</script>

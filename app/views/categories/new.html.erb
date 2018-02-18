@@ -1,0 +1,75 @@
+<h1>for the sake of adding a new category</h1>
+<%= form_for @category do |f| %>
+<% if @category.errors.any?%>
+  <h3> FOLLOWING ARE THE ERRORS THAT ARE OBTAINED WHEN SAVING THE OBJECT:</h3>
+  <ul>
+  <%@category.errors.full_messages.each do |msg|%>
+     <li><%=msg%></li>
+  <%end%>
+  </ul>
+ <%end%>
+ <p>class name:<%= f.class %></p><br/>
+  <label for="category_name">ADD CATEGORY NAME:</label><span id='nameError'></span><br/>
+  <%= f.text_field :name %><br/>
+  <%= f.submit %>
+<%end%>
+<h4 id='verification'></h4>
+<script>
+   var formHandle = document.getElementById('new_category');
+   var nameHandle = document.getElementById('category_name');
+   var submitHandle = document.getElementById('formsubmit');
+   var nameErrorHandle = document.getElementById('nameError');
+   var verificationHandle =document.getElementById('verification');
+   var validator ={
+     nameValid: false
+   } 
+   nameHandle.addEventListener('blur',function(){
+     if(nameHandle.value  !== ''){
+      var xhr = new XMLHttpRequest();
+      console.log('you are in the event Listener');
+      xhr.open('GET','/categories/category_uniqueness_checker?name='+nameHandle.value,true);
+      //validating the uniqueness of the name by using the this thing when the text field is having some thing in it.
+      nameErrorHandle.innerHTML ='';
+      xhr.onreadystatechange =  function(){
+         if((xhr.readyState === 4)&&(xhr.status === 200)){
+            var response = JSON.parse(xhr.responseText);
+              console.log(response);
+              if(!response.msg === true){
+              	  console.log(validator);
+              	  verificationHandle.innerHTML = "Clientside Categoryname not verified";
+                  formHandle.addEventListener('submit',function(e){ 
+                          e.preventDefault();
+                          setTimeout(function(){
+                            submitHandle.disabled = false;
+                         },200)    
+                  },false)
+              }
+              else{
+                    validator.nameValid = true;
+	            	verificationHandle.innerHTML ='Client side category name is verified';
+	                console.log('you are in the else condition');
+	           
+	           }
+                                           
+         }
+      }
+      xhr.send();
+     } 
+    else{
+    	nameErrorHandle.innerHTML = 'can\'t be blank'
+    	formHandle.addEventListener('submit',function(e){
+    		e.preventDefault();
+    		setTimeout(function(){
+    			submitHandle.disbaled = false
+    		},300)
+    	},false)
+    }
+   },false); 
+    
+   nameHandle.addEventListener('focus',function(){
+
+   },false)
+</script>  
+
+
+

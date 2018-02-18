@@ -1,0 +1,34 @@
+LISTING OF ALL THE WIshLISTS FOR THAT PARTICULAR PERSON
+<%if @wishlists.empty? %>
+   No items in the wishlist pf yours
+<%end%>
+
+<% @wishlists.where(user_id: current_user.id).pluck(:product_id).uniq.each do |productid|%>
+   <li><%=Product.find(productid).name%> </li>
+<%end%>  
+
+<%@wishlists.where('user_id=?',current_user.id).each do |wishlist|%>
+   <%=Product.find(wishlist.product_id).name%>
+   <%=link_to 'EDIT THE WISHLIST ',edit_wishlist_path(wishlist.id)%><br/>
+<%end%>
+
+
+<%=form_for Wishlist.new do |f|%>
+<table border="1">
+   <thead>
+   <tr>
+     <th>productNAME</th>
+   </tr>
+   </thead>
+</table>
+   <thead>
+    <tr> 
+        <th><%= f.collection_select :product_id,Product.all,:id,:name%></th>
+        <%= f.hidden_field :user_id,value: current_user.id %>
+    </tr>
+   </thead>
+    <br/>
+
+
+<%=f.submit%>
+<% end %>

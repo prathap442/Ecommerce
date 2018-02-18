@@ -1,0 +1,5 @@
+<% @reviews.each do |review|%>
+    <%if((review.user_id==current_user.id)||(can? :read,review))%>
+         <li>BODY:<%= review.body %> RATING:<%= review.rating%></li>REVIEW BELONGS TO: <%= review.product.name%>
+    <%end%>     
+<% end %>

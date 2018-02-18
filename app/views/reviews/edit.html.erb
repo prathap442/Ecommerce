@@ -1,0 +1,25 @@
+edit the review that belongs to <%= @review.product.name %>
+<%= form_for @review do |f| %>
+<label for="review_body">REVIEW BODY</label>
+<%= f.text_field :body %>
+<label for="review_rating">REVIEW RATING</label>
+<%= f.radio_button :rating,1 %> !
+<%= f.radio_button :rating,2 %> !!
+<%= f.radio_button :rating,3 %> !!!
+<%= f.radio_button :rating,4 %> !!!!
+<%= f.radio_button :rating,5 %> !!!!! 
+<label for="review_product_name">PRODUCT NAME</label>
+<%= @review.product.name %>
+<%=f.hidden_field :product_id, value:@review.product_id %>
+
+<%Review.all.each do |r| %>
+  <ol>
+  <%if r.product_id == @review.product_id %> 
+     <li>BODY:<%= Review.find(r.id).body %> RATING:<%= Review.find(r.id).rating %></li>
+  <% end %>
+  </ol>
+<%end%>  
+
+
+<%= f.submit %>
+<% end %>

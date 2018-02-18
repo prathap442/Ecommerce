@@ -1,0 +1,23 @@
+<h1 id='messagifier'> </h1>
+<%=form_for @wishlist do |f|%>
+<label for="wishlist_product_id">SELECT THE Product</label>
+<%= f.hidden_field :product_id%>
+<%= f.hidden_field :user_id,value: current_user.id %>
+<%=f.submit id:'submit'%>
+<% end %>
+
+<script>
+	 var formHandle = document.getElementById('new_wishlist');
+	 var productIdHandle= document.getElementById("wishlist_product_id");
+     var userIdHandle = document.getElementById("wishlist_product_id");
+     var submitHandle = document.getElementById('submit')
+     var messagifierHandle = document.getElementById('messagifier');
+     submitHandle.addEventListener('submit',function(){
+     	if((productIdHandle.value>0)&&(userIdHandle.value>0)){
+            messagifier.innerHTML = 'can proceed for the further things'
+     	}
+     	else{
+            messagifier.innerHTML = 'can\'t proceed for the further things'
+     	}
+     },true)  
+</script>

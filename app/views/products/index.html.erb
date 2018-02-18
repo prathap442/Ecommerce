@@ -1,0 +1,29 @@
+  <h1> Listing of the products (<%=Product.all.length%>)</h1>
+  <%if(Product.nil?)%>
+  <% puts "No products found"%>
+  <%else%>
+  <%Product.all.each do |p|%>
+  <li>
+     <%=link_to p.name, product_path(p.id)  %>   
+     <%=p.price%>       
+     <%=p.description%>
+     <%=image_tag("#{p.feature_image_url}",size:"30x30")%>
+     <%if ! p.category.nil? %>
+           <%=p.category.name %>
+     <%end %>
+             <%=form_for CartLineItem.new do |f|%>
+                 <%=f.hidden_field :product_id,value: p.id %>
+                 <%=f.hidden_field :quantity,value: 1 %>
+                 <%=f.submit "ADDCART"%>
+             <%end%> 
+      
+           <%=form_for Wishlist.new do |f|%>
+           <%= f.hidden_field :product_id,value: p.id %>
+           <%=f.submit "MOVETOWISHLIST"%>
+           <% end %>         
+  <%end%></li>
+      <% if ((user_signed_in?) || (can? :create, Product.new)) %>
+             </br><%=link_to "ADD NEW product", new_product_path %>
+     <% end %>      
+  </li>
+  <% end%>

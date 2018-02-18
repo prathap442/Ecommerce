@@ -1,0 +1,9 @@
+<%= form_for @wishlist do |f|%>
+  <label for="wishlist_product_id">PRODUCTNAME</label>
+  <%= f.collection_select :product_id,Product.all,:id,:name %>
+  <%= f.hidden_field :user_id %>
+  <%= f.submit %>
+<% end %>
+<script>
+	
+</script>	

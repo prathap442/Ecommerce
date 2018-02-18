@@ -1,0 +1,4 @@
+<% @wishlist do |f| %>
+	WISHLIST ID.<%= @wishlist.id %>
+	WISHLIST PRODUCT <%=Product.find(@wishlist.product_id)%>
+<%end%>	

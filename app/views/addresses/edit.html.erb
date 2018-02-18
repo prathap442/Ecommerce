@@ -1,0 +1,106 @@
+<%=form_for @address do |f|%>
+<label for="address_name">NAME</label>
+<%=f.text_field :name %>
+<label for="address_pincode">PINCODE</label>
+<%=f.number_field :pincode %>
+<label for="address_street">STRET</label>
+<%= f.text_field :street %>
+<label for="address_landmark">LANDMARK</label>
+<%= f.text_field :landmark %>
+<label for="address_city">CITY</label>
+<%= f.text_field :city%>
+<%= f.submit id: 'address_submit'%>
+<%end%>
+
+
+<script>
+	var formHandle = document.getElementById('new_address');
+	var nameHandle = document.getElementById('address_name');
+    var pincodeHandle = document.getElementById('address_pincode');
+    var streetHandle = document.getElementById('address_street');
+    var landmarkHandle = document.getElementById('address_landmark');
+    var cityHandle = document.getElementById('address_city');
+    var validator = {
+        nameValid: false,
+        pincodeValid: false,
+        streetValid: false,
+        landmarkValid: false,
+        cityValid: false	
+    }
+    
+    var pincodeRegex=/^[0-9]{1,6}$/;//the pat1 is called for the pincode verification
+    var submitHandle = document.getElementById('address_submit')
+    var nameErrorHandle = document.getElementById('nameError');
+    var pincodeErrorHandle = document.getElementById('pincodeError');
+    var streetErrorHandle = document.getElementById('streetError');
+    var cityErrorHandle = document.getElementById('cityError');
+    var landmarkErrorHandle = document.getElementById('landmarkError')
+
+    nameHandle.addEventListener('blur',function(){
+         if(nameHandle.value === "")
+               nameErrorHandle.innerHTML = 'can\'t be blank';
+         else{  
+         	   nameErrorHandle.innerHTML = '';
+         	   validator.nameValid = true;
+         } 	   
+    },false);
+
+    pincodeHandle.addEventListener('blur',function(){
+    	 if(pincodeHandle.value === "")
+    	 	   pincodeErrorHandle.innerHTML = 'can\'t be blank';
+    	 else{
+    	 	   if(!pincodeRegex.test(pincodeHandle.value)){
+    	 	      pincodeErrorHandle.innerHTML = 'the pincode u entered is not valid';
+    	       }
+    	       else{
+    	       	   validator.pincodeValid = true;
+    	       	   pincodeErrorHandle.innerHTML = "";
+    	       }
+    	 }      
+    },false);
+
+    streetHandle.addEventListener('blur',function(){
+    	 if(streetHandle.value === "")
+    	       streetErrorHandle.innerHTML = 'can\'t be blank'; 	
+         else{
+         	   streetErrorHandle.innerHTML = '';
+         	   validator.streetValid = true;
+         }
+    },false)
+
+    landmarkHandle.addEventListener('blur',function(){
+    	  if(landmarkHandle.value === "")
+    	  	   landmarkErrorHandle.innerHTML = 'can\'t be blank'
+    	  else{
+    	       landmarkErrorHandle.innerHTML = '';
+    	       validator.landmarkValid = true;
+          }
+    },false)
+
+    cityHandle.addEventListener('blur',function(){
+    	  if(cityHandle.value === '')
+    	  	  cityErrorHandle.innerHTML ='can\'t be blank';
+    	  else{
+    	      cityErrorHandle.innerHTML = '';	
+    	      validator.cityValid = true;
+    	  }
+    },false)
+
+
+    nameHandle.addEventListener('focus',function(){
+    	  nameErrorHandle.innerHTML = 'please enter the name';
+    },false)
+
+    formHandle.addEventListener('submit',function(e){
+       if(Object.values(validator).includes(false)){
+       e.preventDefault();
+       setTimeout(function(){
+       	 submitHandle.disabled = false;
+       	},1000)
+       	}
+       	else {
+       	   	
+       	}  
+    },false)
+   
+</script>		

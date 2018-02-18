@@ -1,0 +1,6 @@
+<%@orders.each do |order|%>
+   order number: <%=order.order_number%>
+   shipping to :<%=order.address.name%>
+   shipping total :<%=order.total%>
+   is_delivered :<%=order.is_delivered%></br>
+<%end%>

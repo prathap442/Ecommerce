@@ -1,0 +1,19 @@
+ <h1> listing of the names of the categories (<%=Category.all.length%> )</h1>
+ 
+ <ol>
+ <% Category.all.each do |cat| %>
+   <li> <%= cat.name %><br/>
+        <% if cat.products.length!=0 %>
+           <%=cat.products.length%> products under this category
+        <% else %>
+           <h4> the category has no products </h4>
+        <% end %>   
+   </li>
+
+   <%= link_to "show",category_path(cat.id)%>
+ <% end %>
+  <% if (user_signed_in?) && (can? :create, Category.new) %> 
+       </br><%= link_to "Create a new category", new_category_path %>
+  <% end %>     
+  
+ </ol>

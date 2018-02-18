@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ecommerce</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%=link_to "Products",products_path%>
+    <%=link_to "Categories",categories_path%>
+    <%= notice %>
+    <%= alert %>
+    
+    <% if user_signed_in? %>
+     welcome <%= current_user.email %>
+        <%= link_to "Account Setting ",edit_user_registration_path %>|<%= link_to  "Logout",destroy_user_session_path,method: :delete %> |
+        <%= link_to "YOUR CART",cart_line_items_path %>
+        |<%= link_to "ADDRESSES(#{(Address.where({user_id: current_user.id})).count})",addresses_path %>
+        |<%= link_to "ADD A NEW ADDRESS",new_address_path %>
+        |<%= link_to "WISHLIST#{Wishlist.all.where(user_id: current_user.id).pluck(:product_id).uniq.count}", wishlists_path %>|
+        <%= link_to "reviews(#{Review.all.where(user_id: current_user.id).count})",reviews_path %>
+     <% else %>
+        <%= link_to "Register",new_user_registration_path %> |
+        <%= link_to "Login",new_user_session_path %>
+     <%end%>
+   <% if user_signed_in? %>
+      <p>Your curernt IP is : (<%= current_user.current_sign_in_ip %>)</p>
+   <% end %>
+    <%= yield %>
+  </body>
+</html>

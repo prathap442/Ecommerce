@@ -1,0 +1,18 @@
+<h1> Now u can edit the thing </h1>
+<%= form_for @category do |f| %>
+ <%if @category.errors.any?%>
+  <h3> FOLLOWING ARE THE ERRORS THAT ARE OBTAINED WHEN SAVING THE OBJECT:</h3>
+    <ul>
+        <%@category.errors.full_messages.each do |msg|%>
+           <li><%=msg%></li>
+        <%end%>
+    </ul>
+ <%end%> 
+  <%= f.class %>
+  <label for="category_name">ADD CATEGORY NAME:</label>
+  <span id='nameError'></span><br/>
+  <%= f.text_field :name %><br/>
+  <%= f.submit id: 'formsubmit'%>
+<%end%>
+
+
