@@ -9,7 +9,7 @@
 
 <h2> ADD TO CART </h2>
 <% if user_signed_in? %>
-  <%= form_for CartLineItem.new do |f| %>
+  <%= form_for (CartLineItem.new,remote: true) do |f| %>
     <label> Quantity </label>
     <%= f.select :quantity,(1..10).to_a %>
     <span id='cartLineItemError'></span>
@@ -19,54 +19,9 @@
 <% else %>
     <p> YOU need to sign in before adding the produccts to the cart </p>
 <% end %>
-<script>
- var formHandle = document.getElementById('new_cart_line_item');
- var cartLineItemQuantityHandle = document.getElementById('cart_line_item_quantity');
- var productIdHandle=document.getElementById('cart_line_item_product_id');
- var cartLineItemErrorHandle = document.getElementById('cartLineItemError');
- var submitHandle = document.getElementById('submitTHeDetails');
- var validator={
-    cartLineItemValid: false,
-    productIdValid: false
-  }
-   cartLineItemQuantityHandle.addEventListener('blur',function(){
-   if(cartLineItemQuantityHandle.value >=9){
-      cartLineItemErrorHandle.innerHTML = 'you can select to a max of 10 but not greater';
-      validator.cartLineItemValid = true
-   }
-
-   else if(cartLineItemQuantityHandle.value>10){
-      validator.cartLineItemValid = false;
-      cartLineItemErrorHandle.innerHTML = 'the quantity is greater  than 10 and cant be taken into for further processing'
-   }
-   else{
-     cartLineItemErrorHandle.innerHTML = 'now the current selected Quantity is 1';
-     validator.cartLineItemValid = true;
-   }
-   },false)
-    
-  if(productHandle.value>1){
-    validator.productIdValid = true;
-  }
-  
-  formHandle.addEvenetListener('submit',function(e){
-      if(Object.values(validator).includes(false))
-          e.preventDefault();
-          setTimeout(function(){
-            submitHandle.disabled = false
-          },300)
-      
-      else{
-         validator.cartLineItemError = "";
-      }     
-  },false)
-
-</script>
-
-
-
-
 <br/>
+
+
 <%= @product.name%><br/>
 <%= @product.price %><br/>
 <%= @product.stock %><br/>
@@ -79,29 +34,33 @@
       <%= Category.find(@product.category_id).name%></h2>
       <%= link_to "products",products_path%>
       <h3> listing of the reviews for this product </h3>
-      <%if @product.reviews.empty? %>
-             <li> no one has added the product reviews be the first to do </li>
-      <%else%>
-             <%@product.reviews.each do |review|%>
-             <li>REVIEW:<%= review.body %>  <%= review.rating %><br/>
-                  <% if ((user_signed_in?) && (can? :destory, review)) %>                
-                     <%= link_to "DESTROY" , review_path(review.id),method: :delete,data: {confirm: "are you sure u want to delete"}%> 
-                     <%=link_to "EDIT", edit_review_path(review.id)%>
-                  <% end %>  
-             </li><br/>
-             <% end %>
-      <%end%>
-     <%=form_for @review do |f| %>
-     <label for="review_body">BODY</label>
-     <%= f.text_field :body %>
-     <label for="review_product_id">TITLE </label>
-     <%=f.hidden_field :product_id, value: @product.id %>
-     <br/>
-     <label for="review_rating">RATING</label>
-     <%= f.radio_button :rating, 1 %> *
-     <%= f.radio_button :rating, 2 %> **
-     <%= f.radio_button :rating, 3 %> ***
-     <%= f.radio_button :rating, 4 %> ****
-     <%= f.radio_button :rating, 5 %> *****
-     <%= f.submit %>
-     <% end %>
+      <ol id='reviewList'>
+        <%if @product.reviews.empty? %>
+               <li> no one has added the product reviews be the first to do </li>
+        <%else%>
+               <%@product.reviews.each do |review|%>
+               <li id='review_<%=review.id%>'>REVIEW:<%= review.body %>  <%= review.rating %><br/>
+                    <% if ((user_signed_in?) && (can? :destory, review)) %>                
+                       <%= link_to "DESTROY" , review_path(review.id),method: :delete,data: {confirm: "are you sure u want to delete"},remote: true %> 
+                       <%=link_to "EDIT", edit_review_path(review.id)%>
+                    <% end %>  
+               </li><br/>
+               <% end %>
+        <%end%>
+     </ol>
+     <p id='reviewNotice'>ReviewNotice</p>
+       <%=form_for(@review, remote: true) do |f| %>
+         <label for="review_body">BODY</label>
+         <%= f.text_field :body %>
+         <label for="review_product_id">TITLE </label>
+         <%=f.hidden_field :product_id, value: @product.id %>
+         <br/>
+         <label for="review_rating">RATING</label>
+         <%= f.radio_button :rating, 1 %> *
+         <%= f.radio_button :rating, 2 %> **
+         <%= f.radio_button :rating, 3 %> ***
+         <%= f.radio_button :rating, 4 %> ****
+         <%= f.radio_button :rating, 5 %> *****
+         <%= f.submit %>
+       <% end %>
+<p id='reviewError'>Errors are</p> 

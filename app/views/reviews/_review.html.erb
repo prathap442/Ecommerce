@@ -1,0 +1,6 @@
+ <li>REVIEW:<%= @review.body %>  <%= @review.rating %><br/>
+    <% if ((user_signed_in?) && (can? :destory, @review)) %>                
+       <%= link_to "DESTROY" , review_path(@review.id),method: :delete,data: {confirm: "are you sure u want to delete"},remote: true %> 
+       <%=link_to "EDIT", edit_review_path(@review.id)%>
+    <% end %>  
+</li>

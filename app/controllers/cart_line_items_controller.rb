@@ -2,9 +2,11 @@ class CartLineItemsController < ApplicationController
  def create 
 		@cart_line_item = CartLineItem.new(cart_line_item_params)
 		@cart_line_item.user_id = current_user.id#?how would this come 
-		binding.pry
 		@cart_line_item.save_or_update
-		redirect_to cart_line_items_path
+		respond_to do |format|
+           format.js
+           format.html{redirect_to cart_line_items_path}
+        end
  end
  def index
 		# CartLineItem.where('user_id = ?', current_user.id)

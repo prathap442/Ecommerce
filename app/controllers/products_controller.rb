@@ -24,11 +24,13 @@ end
 #http method - POST
 #roles & responsibilities  -take the data coming from the form,pass it to the constructor as an argument ,validate the object ,if the validations pass insert the record to the db and reditedct the user to a neewe page, else display the errors on the form
 def create
-	@product=Product.new(params[:product].permit(:name,:description,:price, :stock, :category_id,:image_url,:cod_eligible))
- if @product.save
-  	   redirect_to products_path
- else
- 	     render action: 'new'
+  @product=Product.new(params[:product].permit(:name,:description,:price, :stock, :category_id,:image_url,:cod_eligible))
+ respond_to do |format|
+   if @product.save
+          format.js
+   else
+          format.js
+   end
  end
 end
 #for the below show method

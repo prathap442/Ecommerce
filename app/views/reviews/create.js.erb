@@ -1,0 +1,11 @@
+<% if @review.valid? %>
+  $('#reviewNotice').html('thank  u for your review');
+  $('#reviewList').append('<%= escape_javascript render 'review'%>');
+  $('#new_review')[0].reset();
+  $('#reviewError').hide();
+    setTimeout(function(){
+    	$(reviewNotice).slideUp();
+    },3000)
+<%else%>
+   $('#reveiwError').html('<%= escape_javascript render 'error'%>');    
+<% end%>

@@ -1,12 +1,14 @@
 class ReviewsController < ApplicationController
 before_action :authenticate_user!,except: [:show,:index]
 load_and_authorize_resource
+
 def create
-     @review = review_params
+     @review = Review.new(review_params)
      @review.user_id = current_user.id
-     if @review.save
-     	  redirect_to product_path(@review.product_id)
-     end 	 
+      @review.save
+      respond_to do |format|
+      format.js
+      end     
 end
 
 
@@ -40,7 +42,6 @@ end
 def destroy
 	 @review=Review.find(params[:id])	 
      @review.destroy
-     redirect_to product_path(@review.product_id), notice: "You have successfully destroyed the review" 
 end
     
 
