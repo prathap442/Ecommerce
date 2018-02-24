@@ -2,25 +2,41 @@ LISTING OF ALL THE WIshLISTS FOR THAT PARTICULAR PERSON
 <%if @wishlists.empty? %>
    No items in the wishlist pf yours
 <%end%>
+<ol>
+<%@wishlists.where(user_id: current_user.id).pluck(:product_id).uniq.each do |productid|%>
+   <li><%=Product.find(productid).name%> </li><br/>
+<%end%> 
+</ol>
 
-<% @wishlists.where(user_id: current_user.id).pluck(:product_id).uniq.each do |productid|%>
-   <li><%=Product.find(productid).name%> </li>
-<%end%>  
+<table>
+ <tbody>  
+  <ol>
+  <%@wishlists.where('user_id=?',current_user.id).uniq.each do |wishlist|%>
+     <tr id='wishlist_adder'>
+       <th><%=wishlist.product.name%></th>
+       <th><%=link_to 'EDIT THE WISHLIST ',edit_wishlist_path(wishlist.id)%></th>
+       <th><%=link_to 'Delete the Wishlist',wishlist_path(wishlist.id),method: :delete,remote: true %></th>
+       <br/>
+     </tr>
+  <%end%>
+</ol>
+</tbody>
+</table>
 
-<%@wishlists.where('user_id=?',current_user.id).each do |wishlist|%>
-   <%=Product.find(wishlist.product_id).name%>
-   <%=link_to 'EDIT THE WISHLIST ',edit_wishlist_path(wishlist.id)%><br/>
-<%end%>
 
-
-<%=form_for Wishlist.new do |f|%>
+<br/>
+<br/>
+<b><strong>ADD A WISHLIST</strong></b>
+<h1 id=wishlist_notice></h1>
+<h1 id=wishlist_errors></h1>
+<%=form_for(Wishlist.new,remote: true) do |f|%>
 <table border="1">
    <thead>
    <tr>
      <th>productNAME</th>
    </tr>
    </thead>
-</table>
+
    <thead>
     <tr> 
         <th><%= f.collection_select :product_id,Product.all,:id,:name%></th>
@@ -28,7 +44,6 @@ LISTING OF ALL THE WIshLISTS FOR THAT PARTICULAR PERSON
     </tr>
    </thead>
     <br/>
-
-
+</table>
 <%=f.submit%>
 <% end %>

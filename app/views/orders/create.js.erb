@@ -1,0 +1,7 @@
+<%if (@order.valid?) %>
+  $('#place_the_order').html('the order was placed successfully');
+  swal("the order was placed successfully");
+<%else%>
+  $('#order_errors').html('the order was not placed successfully');
+  $('#order_errors').append('escape_javascript <%=render '_errors'%>'); 	
+<%end%>

@@ -6,6 +6,8 @@
     setTimeout(function(){
     	$(reviewNotice).slideUp();
     },3000)
+   $.growl.notice({ message: "Thnk u for the submission!" })  
 <%else%>
+   $.growl.error({ message: "There is an error!" });
    $('#reveiwError').html('<%= escape_javascript render 'error'%>');    
 <% end%>

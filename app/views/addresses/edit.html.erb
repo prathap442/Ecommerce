@@ -1,4 +1,6 @@
-<%=form_for @address do |f|%>
+<h5 id=address_errors></h5>
+<h1 id='address_notice'></h1> 
+<%=form_for(@address, remote: true ) do |f|%>
 <label for="address_name">NAME</label>
 <%=f.text_field :name %>
 <label for="address_pincode">PINCODE</label>
@@ -14,7 +16,8 @@
 
 
 <script>
-	var formHandle = document.getElementById('new_address');
+    // this is the place where i get mistake
+	var formHandle = document.getElementById('edit_address_10');
 	var nameHandle = document.getElementById('address_name');
     var pincodeHandle = document.getElementById('address_pincode');
     var streetHandle = document.getElementById('address_street');
@@ -90,14 +93,14 @@
     nameHandle.addEventListener('focus',function(){
     	  nameErrorHandle.innerHTML = 'please enter the name';
     },false)
-
+    console.log(formHandle)
     formHandle.addEventListener('submit',function(e){
        if(Object.values(validator).includes(false)){
-       e.preventDefault();
-       setTimeout(function(){
-       	 submitHandle.disabled = false;
-       	},1000)
-       	}
+           e.preventDefault();
+           setTimeout(function(){
+           	 submitHandle.disabled = false;
+           },1000)
+       }
        	else {
        	   	
        	}  

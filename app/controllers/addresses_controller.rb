@@ -3,7 +3,7 @@ before_action :authenticate_user!
 load_and_authorize_resource
 #for the index page of the addresses 
 def index
-	@addresses=Address.all
+	@addresses=current_user.addresses
 end
 # for the sake of the creation of the new address
 #localhost:3000/address/new

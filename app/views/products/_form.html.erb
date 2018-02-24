@@ -47,11 +47,8 @@
   //validations for the uniqueness of the name and the presence of the name needs to nbe  done
   
   var validator={
-    nameValid: false,
     priceValid: false,
-    descriptionValid: false,
-    stockValid: false,
-    codeEligibleValid: false
+    descriptionValid: false
   }
 
   //this has validated name presence,uniqueness
@@ -96,6 +93,7 @@
 
      }
      else{
+       validator.descriptionValid = false;
        descriptionErrorHandle.innerHTML = 'description shouldn\'t be blank';
      }
   },false)
@@ -110,15 +108,12 @@
   
   priceHandle.addEventListener('blur',function(){
      if((priceHandle.value !== "")&&(priceHandle.value>0)){
-         if(parseInt(priceHandle.value) == parseFloat(priceHandle.value)){
-           priceErrorHandle.innerHTML = 'the number should be a float number';
-         }
-         else{
+         if(priceHandle.value>0){
             priceErrorHandle.innerHTML = 'the price is a valid one';      
          }
      }
      else{
-         priceErrorHandle.innerHTML = 'u haven\'t filled the entity'
+         priceErrorHandle.innerHTML = 'u haven\'t filled the entity';
      }
   },false) 
 
@@ -127,16 +122,12 @@
          stockErrorHandle.innerHTML = 'the stock value should be satifisied';
      }
      else{
-         stockErrorHandle.innerHTML = 'the stock value given is valid'
+         stockErrorHandle.innerHTML = 'the stock value given is valid';
      } 
   },false)
 
   stockHandle.addEventListener('focus',function(){
      stockErrorHandle.innerHTML = 'the stock should be mentioned';
-  },false)
-
-  codEligibleHandle.addEventListener('focus',function(){
-     codErrorHandle.innerHTML = 'the cod should be mentioned if required else dont mention';
   },false)
 
   imageHandle.addEventListener('blur',function(){
@@ -158,21 +149,12 @@
              e.preventDefault();
              setTimeout(function(){
                    submitHandle.disabled = false
-             },300)   
+             },300)
+             console.log(validator);
+             $.growl.notice({message:'the submitted details are verified'});   
          }
          else{
          }
   },false)
+ $('#product_category_id').chosen({max_selected_options: 5});
   </script>
-
-
-
-
-
-
-
-
-
-
-
-

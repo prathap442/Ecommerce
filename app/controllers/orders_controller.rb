@@ -10,10 +10,10 @@ end
 def create
     @order=Order.new(order_params)
     @order.user_id=current_user.id
-    binding.pry 	
-    @order.save
-    redirect_to orders_path
-    binding.pry
+    if !(@order.errors.any?) 	
+       @order.save
+    else
+    end    
 end
 private
 def order_params

@@ -21,8 +21,12 @@ end
 #roles and the responsibilities:are to create a record and before saving the records we check all the attributes and the properties are correctly satisfied
 def create
 	@wishlist=Wishlist.new(wishlist_params)
+	@wishlist.user_id = current_user.id
 	if @wishlist.save
-		redirect_to wishlists_path
+		respond_to do |format|
+			format.js
+			format.html {redirect_to wishlists_path}
+        end
     else
         render action: 'new'
     end
@@ -56,8 +60,11 @@ def destroy
 	@wishlist=Wishlist.find(params[:id])
     if (@wishlist.user_id==current_user.id)
 	    @wishlist.destroy
-          redirect_to wishlists_path
-	end
+        respond_to do |format|
+        	format.js{redirect_to wishlists_path}
+        	format.html
+        end 	
+    end
 end	
 
 private

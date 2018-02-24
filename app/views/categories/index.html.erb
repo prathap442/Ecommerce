@@ -2,18 +2,20 @@
  
  <ol>
  <% Category.all.each do |cat| %>
-   <li> <%= cat.name %><br/>
+   <li> 
+        <%= cat.name %><br/>
         <% if cat.products.length!=0 %>
            <%=cat.products.length%> products under this category
         <% else %>
            <h4> the category has no products </h4>
         <% end %>   
    </li>
-
-   <%= link_to "show",category_path(cat.id)%>
- <% end %>
+   <% if(user_signed_in?) && (can? :destroy,cat)%>
+     <%= link_to "show",category_path(cat)%>
+     <%= link_to "destroy",category_path(cat),method: :delete,remote: true%>
+   <%end%>
+ <%end%>  
   <% if (user_signed_in?) && (can? :create, Category.new) %> 
        </br><%= link_to "Create a new category", new_category_path %>
   <% end %>     
-  
  </ol>

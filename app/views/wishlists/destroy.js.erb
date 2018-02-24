@@ -1,0 +1,2 @@
+$('#wishlists_counter').html('wishlist(<%=current_user.wishlists.pluck(:name).uniq.count%>)')
+$('#wishlist_notice').html('wishlist(<%=@wishlist.product.name) was successfully destroyed');

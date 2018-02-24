@@ -1,5 +1,5 @@
 <h1>for the sake of adding a new category</h1>
-<%= form_for @category do |f| %>
+<%= form_for(@category, remote: true) do |f| %>
 <% if @category.errors.any?%>
   <h3> FOLLOWING ARE THE ERRORS THAT ARE OBTAINED WHEN SAVING THE OBJECT:</h3>
   <ul>
@@ -8,8 +8,8 @@
   <%end%>
   </ul>
  <%end%>
- <p>class name:<%= f.class %></p><br/>
-  <label for="category_name">ADD CATEGORY NAME:</label><span id='nameError'></span><br/>
+  <label for="category_name">CATEGORY-NAME:</label>
+  <span id='nameError'></span><br/>
   <%= f.text_field :name %><br/>
   <%= f.submit %>
 <%end%>

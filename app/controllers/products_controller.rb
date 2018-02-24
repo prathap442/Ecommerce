@@ -17,6 +17,9 @@ end
 #roles& responsibility - is to setup a form for adding a new product
 def new
   @product=Product.new
+  if(params[:category_id] != nil)
+    @product = Product.new({category_id: params[:category_id]})
+  end
 end
 #url - https ://localhost:3000/products/create
 #uri -/products/create
@@ -25,13 +28,17 @@ end
 #roles & responsibilities  -take the data coming from the form,pass it to the constructor as an argument ,validate the object ,if the validations pass insert the record to the db and reditedct the user to a neewe page, else display the errors on the form
 def create
   @product=Product.new(params[:product].permit(:name,:description,:price, :stock, :category_id,:image_url,:cod_eligible))
- respond_to do |format|
    if @product.save
+         respond_to do |format|
           format.js
+          format.html{redirect_to product_path(@product.id)}
+         end 
    else
+        respond_to do |format|
           format.js
+          format.html{redirect_to product_path(@product.id)}
+        end
    end
- end
 end
 #for the below show method
 #url-localhost:3000/products/:id

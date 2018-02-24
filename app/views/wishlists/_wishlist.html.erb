@@ -1,0 +1,5 @@
+    <tr>
+        <th><%=@wishlist.product.name%></th>
+		<th><%=link_to "edit the wishlist",edit_wishlist_path(@wishlist.id)%></th>
+	    <th><%=link_to "destroy the wishlist",wishlist_path(@wishlist.id),method: :delete,remote: true%></th> 
+	</tr>

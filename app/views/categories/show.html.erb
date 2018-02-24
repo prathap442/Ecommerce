@@ -1,20 +1,23 @@
 <h1>displaying the category details<h1>
 <p>NAME:<%=@category.name%></p>
-<%= link_to "edit the category details",edit_category_path(@category.id),method: :GET%>
+<h3><%= link_to "edit the category details",edit_category_path(@category.id),method: :GET%>
 <%=link_to "delete the category",category_path(@category.id),method: :DELETE %>
+</h3>
 <% if @category.products.empty? %>
- <p> NO products found </p>
- <%else %>
-<p>the number of products under this article are:<%= @article.products.count %></p>
+    <p> NO products found </p>
+<%else %>
+    the number of products under this article are:<%=@category.products.count %>
 <% end %>
  <p> Listing the products</p>
   <ul>
     <% if ! @category.products.empty? %>
+    <ol>
     <% @category.products.each do |prod| %>
-         <li><%= link_to "product_show_page", product_path(prod.id) %></li>
-    <%end %> 
+         <li><%= link_to prod.name, product_path(prod.id) %></li>
+    <%end %>
+    </ol> 
     <% else %>
       <p>  No products found </p>
      <%end %> 
   </ul>
-<%= link_to "ADD A NEW PRODUCT",new_product_path(@category.id) %>    
+<%= link_to "ADD A NEW PRODUCT", new_product_path(category_id: @category.id) %>    

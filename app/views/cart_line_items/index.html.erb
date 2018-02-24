@@ -1,4 +1,4 @@
-<h2> YOUR CART <  /h2>
+<h2> YOUR CART </h2>
 <% if @cart_line_items.empty? %>
 	<p>YOUR cart is empty. Shop <%= link_to "here", products_path %></p>
 <%else%>
@@ -34,18 +34,21 @@
            <%sum+=((cart_line_item.quantity)*(cart_line_item.product.price))%>
            <%end%>
            <%=sum %>
-<h1>place the order </h1>
 
-<%=form_for Order.new do |f|%>
+<h1 id='order_errors'></h1>           
+<h1 id='place_the_order'>place the order </h1>
+<%=form_for(Order.new, remote: true) do |f|%>
   <%current_user.addresses.each do |address|%>
-      <label for="user_address"><%address.name%></label>
-      <%= f.radio_button :address_id,address.id%> <%address.name%><%=address.landmark%>-<%=address.city%></br>
+      <label for="user_address"><%=address.name%></label>
+      <%= f.radio_button :address_id,address.id%> 
+      <%address.name%>
+      <%=address.landmark%>-<%=address.city%></br>
   <%end%>
  <%=f.submit "Create order"%>    
 <%end%>
-<script>
-  
-</script>  
+<script>  
 
+</script>  
 <%end%>
+
                

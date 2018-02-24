@@ -27,11 +27,10 @@ def move_the_cart_line_items_to_order_line_items
 end	
 
 def delete_the_items_from_the_cart
-	CartLineItem
-	.delete(self.user.cart_line_items.pluck(:id))
+	CartLineItem.delete(self.user.cart_line_items.pluck(:id))
 end
 
 def send_order_confirmation
-  NotificationMailer.order_confirmation(self).deliver!
+  #NotificationMailer.order_confirmation(self).deliver!
 end
 end

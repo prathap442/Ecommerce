@@ -9,7 +9,7 @@
 
 <h2> ADD TO CART </h2>
 <% if user_signed_in? %>
-  <%= form_for (CartLineItem.new,remote: true) do |f| %>
+  <%= form_for(CartLineItem.new , remote: true) do |f| %>
     <label> Quantity </label>
     <%= f.select :quantity,(1..10).to_a %>
     <span id='cartLineItemError'></span>
@@ -63,4 +63,41 @@
          <%= f.radio_button :rating, 5 %> *****
          <%= f.submit %>
        <% end %>
-<p id='reviewError'>Errors are</p> 
+<p id='reviewError'>Errors are</p>
+
+<div class="date">
+<label for="from">From</label>
+<input type="text" id="from" name="from"/>
+<label for="to">to</label>
+<input type="text" id="to" name="to"/>
+
+
+
+<script>
+$('#cart_line_item_quantity').chosen({no_results_text: "Oops,Nothing is found"});
+</script>
+
+
+
+
+<!-- THis is for my convienience the date picker -->
+<script type="text/javascript">
+    $(function() {
+        var dates = $( "#from, #to" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            minDate: 0,
+            dateFormat: 'yy-mm-dd',
+            numberOfMonths: 2,
+            onSelect: function( selectedDate ) {
+                var option = this.id == "from" ? "minDate" : "maxDate",
+                    instance = $( this ).data( "datepicker" ),
+                    date = $.datepicker.parseDate(
+                        instance.settings.dateFormat ||
+                        $.datepicker._defaults.dateFormat,
+                        selectedDate, instance.settings );
+                dates.not( this ).datepicker( "option", option, date );
+            }
+        });
+    });
+    </script>    
