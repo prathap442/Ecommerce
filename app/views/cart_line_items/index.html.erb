@@ -5,8 +5,8 @@
     <table border="1" >
       <thead>
          <tr>
-              <th> # </th>
-              <th>  PICTURE</th>
+              <th>#</th>
+              <th>PICTURE</th>
               <th> NAME </th>
               <th>PRICE</th>
               <th>Quantity</th>
@@ -29,12 +29,12 @@
       </tbody>
 
 </table>
- TOTAL IS: <% sum=0 %>
-           <%@cart_line_items.each do |cart_line_item|%>
-           <%sum+=((cart_line_item.quantity)*(cart_line_item.product.price))%>
-           <%end%>
-           <%=sum %>
-
+<!-- Here i have actually used the helper method ffor the views of the index  -->
+ <div class="container">
+   THe TOTAL SUM of the items is:
+      <%=total_calculator%><br/>
+      THE Role is <%=current_user.role.name%> 
+ </div>
 <h1 id='order_errors'></h1>           
 <h1 id='place_the_order'>place the order </h1>
 <%=form_for(Order.new, remote: true) do |f|%>
@@ -47,7 +47,7 @@
  <%=f.submit "Create order"%>    
 <%end%>
 <script>  
-
+ 
 </script>  
 <%end%>
 

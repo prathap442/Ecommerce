@@ -1,10 +1,11 @@
-if(@address.valid?){
+<%if(@address.valid?)%>
    setTimeout(function(){
    	 $('#address_notice').slideUp('the address was successfully updated');
    },5000)
     swal('THANK U updated items are in ur basket'); 
    $('#address_errors').html('')
 }
-else{
+<%else%>
    $('#address_errors').append('escape_javascript <%=render 'errors'%>');
-}	
+}
+<%end%>	
