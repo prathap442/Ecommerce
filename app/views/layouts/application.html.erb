@@ -5,33 +5,41 @@
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    
     <script src= 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+    <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/bootstrap.bundle.js"></script> 
+    
+    <script src = '/javascripts/jquery-ui.js'></script>
     <!-- always user the libraries first -->
     <script src="/javascripts/jquery.growl.js" type="text/javascript"></script>
     <script src='/javascripts/chosen.jquery.js'></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src = '/javascripts/jquery-ui.js'></script>
+
     <link href = '/stylesheets/jquery-ui.css' rel= 'stylesheet'>
     <link href="/stylesheets/chosen.css" rel='stylesheet'>
     <link href="/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/shop-homepage.css" rel="stylesheet" type="text/css"/>
     <!-- this is for the sweeet alert (below) -->
-    <!-- this below one is for the growl-->
-    
+    <!-- this below one is for the growl-->    
  </head>
 
   <body>
-    <%=link_to "Products",products_path%>
-    <%=link_to "Categories",categories_path%>
     <%= notice %>
     <%= alert %>
     
     <% if user_signed_in? %>
+     <div class="container">
+       <div class="col-md-6">
      welcome <%= current_user.email %>
-        <%= link_to "Account Setting ",edit_user_registration_path %>|<%= link_to  "Logout",destroy_user_session_path,method: :delete %> |
+       </div>
+        <div class="col-md-6"> 
+        <%= link_to "Account Setting ",edit_user_registration_path %>|<%= link_to  "Logout",destroy_user_session_path,method: :delete %>||
         <%= link_to "YOUR CART(#{current_user.cart_line_items.pluck(:quantity).inject(:+)})",cart_line_items_path%>
         <%= link_to "WISHLIST#{Wishlist.all.where(user_id: current_user.id).pluck(:product_id).uniq.count}", wishlists_path ,id: 'wishlists_counter' %>|
         <%= link_to "reviews(#{Review.all.where(user_id: current_user.id).count})",reviews_path %>
         <%= link_to "your addresses",addresses_path%>
+      </div>  
      <% else %>
         <%= link_to "Register",new_user_registration_path %> |
         <%= link_to "Login",new_user_session_path %>

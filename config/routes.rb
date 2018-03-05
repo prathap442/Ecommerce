@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  post '/rate' => 'rater#create', :as => 'rate'
   get  'say/hello'
   root 'products#index' 
   get  'say/dual_mode'

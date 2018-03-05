@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  ratyrate_rater
   has_many :permissions
   has_many :roles , through: :permissions
   has_many :cart_line_items
@@ -8,8 +9,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-
-
 validates_presence_of :username, :mobile
 validates_numericality_of :mobile
 validates_length_of :mobile,is: 10

@@ -41,7 +41,7 @@
   <%current_user.addresses.each do |address|%>
       <label for="user_address"><%=address.name%></label>
       <%= f.radio_button :address_id,address.id%> 
-      <%address.name%>
+      <%=address.name%>
       <%=address.landmark%>-<%=address.city%></br>
   <%end%>
  <%=f.submit "Create order"%>    
